@@ -6,7 +6,7 @@
     <form action="<?php echo url('/admin/categories'); ?>" method="POST" style="display: flex; gap: 1rem;">
         <input type="hidden" name="action" value="create">
         <input type="text" name="name" required placeholder="Category Name" style="flex: 1; padding: 0.5rem;" value="<?= htmlspecialchars($_SESSION['old']['name'] ?? '') ?>">
-        <?php // show any typed category name again after form error ?>
+        <?php ?>
         <button type="submit" class="btn">Add</button>
     </form>
     <?php unset($_SESSION['old']); ?>

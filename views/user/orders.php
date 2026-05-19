@@ -3,7 +3,7 @@
 <?php if (empty($orders)): ?>
     <p>You have no orders yet.</p>
 <?php else: ?>
-    <?php // show a summary of each order and let users expand details ?>
+    <?php ?>
     <?php foreach ($orders as $order): ?>
         <div class="card" id="order-<?= $order['id'] ?>">
             <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleDetails(<?= $order['id'] ?>)">
@@ -49,8 +49,6 @@ function toggleDetails(id) {
     }
 }
 
-// Status Polling for active orders
-// refresh
 const activeOrders = <?= json_encode(array_values(array_filter($orders, function($o) { return $o['status'] !== 'Delivered'; }))) ?>;
 
 activeOrders.forEach(order => {
@@ -69,7 +67,7 @@ activeOrders.forEach(order => {
                     if (data.status === 'Out for Delivery') badge.classList.add('badge-delivery');
                     if (data.status === 'Delivered') {
                         badge.classList.add('badge-delivered');
-                        clearInterval(intervalId); // Stop polling this order
+                        clearInterval(intervalId); 
                     }
                 }
             }

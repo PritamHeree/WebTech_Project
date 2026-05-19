@@ -8,8 +8,7 @@ $_FILES['image'] = [
     'error' => UPLOAD_ERR_OK,
     'size' => filesize($tmpName)
 ];
-// validation
-// note move
+
 $size = $_FILES['image']['size'];
 $type = mime_content_type($tmpName);
 echo "Type: $type\n";
@@ -22,6 +21,4 @@ $dir = 'public/uploads/menu';
 $filename = uniqid() . '.jpg';
 $destination = $dir . '/' . $filename;
 echo "Moving $tmpName to $destination\n";
-// move uploaded
-// but we
-// wait controller
+

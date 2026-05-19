@@ -4,8 +4,7 @@ class OrderController {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // order pages
-        // auth
+
         if (!isset($_SESSION['user_id'])) {
             redirect('/login');
         }
@@ -14,8 +13,7 @@ class OrderController {
     public function myOrders() {
         $orderModel = new Order($this->pdo);
         $orders = $orderModel->getByUser($_SESSION['user_id']);
-        
-        // attach line
+
         $orderItemModel = new OrderItem($this->pdo);
         foreach ($orders as &$order) {
             $order['items'] = $orderItemModel->getByOrder($order['id']);

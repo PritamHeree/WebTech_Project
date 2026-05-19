@@ -2,10 +2,6 @@
 session_start();
 require_once 'config/database.php';
 
-// db
-// bootstrap
-
-// Helper for generating base URLs
 function url($path = '') {
     $basePath = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
     if ($basePath === '/' || $basePath === '.') {
@@ -16,17 +12,16 @@ function url($path = '') {
     $decodedPath = rawurldecode($path);
     $decodedBase = rawurldecode($basePath);
     if ($basePath !== '' && strpos($decodedPath, $decodedBase) === 0) {
-        // Path already starts with basePath
+        
         return $path;
     }
     
     return $basePath . '/' . ltrim($path, '/');
 }
 
-// Helper for redirecting
 function redirect($url) {
     if (!preg_match('~^(?:f|ht)tps?://~i', $url)) {
-        // path
+        
         if (strpos($url, '/') === 0) {
             $url = url($url);
         } else {
@@ -37,17 +32,14 @@ function redirect($url) {
     exit;
 }
 
-// Router
 $requestUri = $_SERVER['REQUEST_URI'];
 $scriptName = $_SERVER['SCRIPT_NAME'];
 
-// path
 $uri = parse_url($requestUri, PHP_URL_PATH);
 
-// path
 $baseDir = dirname($scriptName);
 if ($baseDir !== '/') {
-    // path
+    
     $decodedUri = rawurldecode($uri);
     $decodedBase = rawurldecode($baseDir);
     
@@ -56,14 +48,10 @@ if ($baseDir !== '/') {
     }
 }
 
-// path
 if (empty($uri)) $uri = '/';
 
-// Handle routes
 $method = $_SERVER['REQUEST_METHOD'];
 
-// add autoloader
-// bootstrap
 spl_autoload_register(function ($class) {
     if (file_exists("controllers/$class.php")) {
         require_once "controllers/$class.php";
@@ -72,12 +60,10 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// remember
-// seamless login
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     $userModel = new User($pdo);
     $cookieHash = hash('sha256', $_COOKIE['remember_token']);
-    // token
+    
     $user = $userModel->findByRememberToken($cookieHash);
     if ($user) {
         $_SESSION['user_id'] = $user['id'];
@@ -86,7 +72,6 @@ if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     }
 }
 
-// Simple Router
 if ($uri === '/' || $uri === '' || $uri === '/menu') {
     $controller = new ShopController($pdo);
     $controller->menu();
@@ -156,7 +141,7 @@ if ($uri === '/' || $uri === '' || $uri === '/menu') {
     if ($method === 'PUT') $controller->updateOrderStatus($matches[1]);
     else $controller->getOrderStatus($matches[1]);
 } else {
-    // fallback
+    
     http_response_code(404);
     echo "404 Not Found";
 }

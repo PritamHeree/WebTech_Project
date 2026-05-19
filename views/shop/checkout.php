@@ -3,8 +3,7 @@
 <div class="auth-container" style="max-width: 640px; margin: 3rem auto;">
     <div class="auth-card" style="padding: var(--spacing-xl);">
         <h2 class="auth-title" style="text-align: left; border-bottom: 3px solid var(--brand-red); padding-bottom: var(--spacing-xs); margin-bottom: var(--spacing-lg);">Checkout</h2>
-        
-        <!-- premium visual -->
+
         <div style="background: #f1f5f9; padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg); border: 1px solid var(--color-border); display: flex; flex-direction: column; gap: var(--spacing-xs);">
             <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--brand-blue); margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 0.05em;">Order Summary</h3>
             <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: var(--color-text-primary);">

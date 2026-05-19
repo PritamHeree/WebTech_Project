@@ -1,7 +1,6 @@
     </div>
     <script>
-        // Common utility functions
-        // fetchjson sends
+
         async function fetchJson(url, data) {
             const formData = new FormData();
             for (const key in data) {

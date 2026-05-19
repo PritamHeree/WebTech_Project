@@ -7,12 +7,10 @@ foreach ($iterator as $file) {
     if ($file->getExtension() !== 'php') continue;
     if ($file->getFilename() === 'index.php') continue;
     if ($file->getFilename() === 'fix_urls.php') continue;
-    // path fix
-    
+
     $content = file_get_contents($file->getPathname());
     $original = $content;
-    
-    // For views
+
     if (strpos($file->getPathname(), '/views/') !== false) {
         $content = preg_replace('#href="/WebTech%20Project/(.*?)"#', 'href="<?php echo url(\'/$1\'); ' . '?>"', $content);
         $content = preg_replace('#action="/WebTech%20Project/(.*?)"#', 'action="<?php echo url(\'/$1\'); ' . '?>"', $content);
@@ -21,8 +19,7 @@ foreach ($iterator as $file) {
         $content = str_replace('href="/WebTech%20Project"', 'href="<?php echo url(\'/\'); ' . '?>"', $content);
         $content = str_replace('action="/WebTech%20Project"', 'action="<?php echo url(\'/\'); ' . '?>"', $content);
     }
-    
-    // For controllers
+
     if (strpos($file->getPathname(), '/controllers/') !== false) {
         $content = preg_replace('/redirect\([\'"]\/WebTech%20Project\/(.*?)[\'"]\)/', "redirect('/$1')", $content);
         $content = preg_replace('/redirect\([\'"]\/WebTech%20Project[\'"]\)/', "redirect('/')", $content);

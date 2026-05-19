@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Food Ordering</title>
-    <!-- Basic styling for student project -->
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
         
@@ -16,14 +16,14 @@
             color: #1e293b;
         }
         header { 
-            background-color: #0055a5; /* Domino's Blue */
+            background-color: #0055a5; 
             color: #fff; 
             padding: 1.25rem 2rem; 
             display: flex; 
             justify-content: space-between; 
             align-items: center;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-            border-bottom: 3px solid #e31837; /* Domino's Red */
+            border-bottom: 3px solid #e31837; 
         }
         header a { 
             color: #e2e8f0; 
@@ -108,7 +108,7 @@
             box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
         }
         .btn-success { 
-            background: #ea580c; /* Vibrant Food Orange */
+            background: #ea580c; 
             box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.2);
         }
         .btn-success:hover {

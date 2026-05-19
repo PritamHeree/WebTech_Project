@@ -4,8 +4,7 @@ class AdminController {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // admin controller
-        // every admin
+
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             redirect('/login');
         }
@@ -14,8 +13,7 @@ class AdminController {
     public function dashboard() {
         $catModel = new Category($this->pdo);
         $menuModel = new MenuItem($this->pdo);
-        
-        // show quick
+
         $categoriesCount = $catModel->getCount();
         $menuItemsCount = $menuModel->getCount();
         $unavailableCount = $menuModel->getUnavailableCount();
@@ -36,7 +34,7 @@ class AdminController {
         if ($action === 'create') {
             $name = trim($_POST['name']);
             if (!empty($name)) {
-                // category
+                
                 $catModel->create($name);
                 $_SESSION['success'] = "Category created.";
             } else {
@@ -47,7 +45,7 @@ class AdminController {
             $id = $_POST['id'];
             $name = trim($_POST['name']);
             if (!empty($name)) {
-                // category
+                
                 $catModel->update($id, $name);
                 $_SESSION['success'] = "Category updated.";
             } else {
@@ -56,8 +54,7 @@ class AdminController {
             }
         } elseif ($action === 'delete') {
             $id = $_POST['id'];
-            // category
-            // leaving child
+
             if (!$catModel->delete($id)) {
                 $_SESSION['error'] = "Cannot delete category: It has existing menu items.";
             } else {
@@ -82,14 +79,13 @@ class AdminController {
         $menuModel = new MenuItem($this->pdo);
         
         if ($action === 'create' || $action === 'edit') {
-            // use single
+            
             $name = trim($_POST['name']);
             $description = trim($_POST['description']);
-            $price = floatval($_POST['price']); // normalize form input to a float
+            $price = floatval($_POST['price']); 
             $categoryId = $_POST['category_id'];
-            $isAvailable = isset($_POST['is_available']) ? 1 : 0; // checkbox => 1/0
-            
-            // validation
+            $isAvailable = isset($_POST['is_available']) ? 1 : 0; 
+
             if ($price <= 0) {
                 $_SESSION['error'] = "Price must be positive.";
                 $_SESSION['old'] = $_POST;
@@ -98,7 +94,7 @@ class AdminController {
             
             $imagePath = null;
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                // validate uploaded image before moving it
+                
                 $tmpName = $_FILES['image']['tmp_name'];
                 $size = $_FILES['image']['size'];
                 $type = mime_content_type($tmpName);
@@ -123,7 +119,7 @@ class AdminController {
                 $destination = $dir . '/' . $filename;
                 
                 if (move_uploaded_file($tmpName, $destination)) {
-                    // accept upload
+                    
                     $imagePath = $destination;
                 } else {
                     $_SESSION['error'] = "Failed to save the uploaded image.";
@@ -137,18 +133,18 @@ class AdminController {
             }
             
             if ($action === 'create') {
-                // insert new menu item
+                
                 $menuModel->create($categoryId, $name, $description, $price, $imagePath, $isAvailable);
                 $_SESSION['success'] = "Menu item created.";
             } else {
                 $id = $_POST['id'];
-                // update existing item, image is optional
+                
                 $menuModel->update($id, $categoryId, $name, $description, $price, $imagePath, $isAvailable);
                 $_SESSION['success'] = "Menu item updated.";
             }
         } elseif ($action === 'delete') {
             $id = $_POST['id'];
-            // remove file
+            
             $item = $menuModel->findById($id);
             if ($item && $item['image_path'] && file_exists($item['image_path'])) {
                 unlink($item['image_path']);
@@ -165,11 +161,9 @@ class AdminController {
         
         $statusFilter = isset($_GET['status']) ? $_GET['status'] : '';
         $dateFilter = isset($_GET['date']) ? $_GET['date'] : '';
-        
-        // support admin
+
         $orders = $orderModel->getFiltered($statusFilter, $dateFilter);
-        
-        // Fetch items for each order
+
         $orderItemModel = new OrderItem($this->pdo);
         foreach ($orders as &$order) {
             $order['items'] = $orderItemModel->getByOrder($order['id']);

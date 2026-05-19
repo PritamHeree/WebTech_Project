@@ -4,8 +4,7 @@ class Order {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // dependency injection
-        // db
+
     }
     
     public function getAll() {
@@ -26,8 +25,7 @@ class Order {
     }
     
     public function create($userId, $totalAmount, $address) {
-        // new orders always start in Pending state
-        // first step
+
         $stmt = $this->pdo->prepare("INSERT INTO orders (user_id, total_amount, status, delivery_address) VALUES (?, ?, 'Pending', ?)");
         $stmt->execute([$userId, $totalAmount, $address]);
         return $this->pdo->lastInsertId();
@@ -39,8 +37,7 @@ class Order {
     }
 
     public function getFiltered($statusFilter, $dateFilter) {
-        // allow optional
-        // loading too
+
         $query = "SELECT o.*, u.name as user_name FROM orders o LEFT JOIN users u ON o.user_id = u.id WHERE 1=1";
         $params = [];
         

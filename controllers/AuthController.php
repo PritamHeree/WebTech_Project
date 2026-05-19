@@ -7,7 +7,7 @@ class AuthController {
     }
     
     public function login() {
-        // auth
+        
         if (isset($_SESSION['user_id'])) {
             redirect('/');
         }
@@ -23,19 +23,17 @@ class AuthController {
         $user = $userModel->findByEmail($email);
         
         if ($user && password_verify($password, $user['password'])) {
-            // success login
-            // keeping role
+
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['name'] = $user['name'];
             $_SESSION['role'] = $user['role'];
             
             if ($remember) {
-                // remember
-                // token is
+
                 $token = bin2hex(random_bytes(32));
                 $hash = hash('sha256', $token);
                 $userModel->updateRememberToken($user['id'], $hash);
-                setcookie('remember_token', $token, time() + (86400 * 30), "/"); // 30 days
+                setcookie('remember_token', $token, time() + (86400 * 30), "/"); 
             }
             
             if ($user['role'] === 'admin') {
@@ -161,8 +159,7 @@ class AuthController {
     }
     
     public function logout() {
-        // clear session and persistent login token
-        // session destroy
+
         session_destroy();
         if (isset($_COOKIE['remember_token'])) {
             unset($_COOKIE['remember_token']);

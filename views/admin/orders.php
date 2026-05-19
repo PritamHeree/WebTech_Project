@@ -3,7 +3,7 @@
 
 <div class="card" style="margin-bottom: 1rem;">
     <form method="GET" action="<?php echo url('/admin/orders'); ?>" style="display: flex; gap: 1rem; align-items: center;">
-        <?php // allow admin filtering so order list stays manageable ?>
+        <?php ?>
         <label>Status:</label>
         <select name="status">
             <option value="">All</option>
@@ -104,11 +104,11 @@ async function updateStatus(id, selectElement) {
             setTimeout(() => ind.style.display = 'none', 2000);
         } else {
             alert(result.error || 'Failed to update status');
-            selectElement.value = originalValue; // Revert
+            selectElement.value = originalValue; 
         }
     } catch(e) {
         alert('Network error');
-        selectElement.value = originalValue; // Revert
+        selectElement.value = originalValue; 
     }
 }
 </script>

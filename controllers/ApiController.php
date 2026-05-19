@@ -4,13 +4,12 @@ class ApiController {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // make sure
-        // ensures javascript
+
         header('Content-Type: application/json');
     }
     
     public function toggleMenuItem() {
-        // api endpoint
+        
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             echo json_encode(['success' => false, 'error' => 'Unauthorized']);
             return;
@@ -30,9 +29,7 @@ class ApiController {
     public function searchMenuItems() {
         $q = isset($_GET['q']) ? $_GET['q'] : '';
         $menuModel = new MenuItem($this->pdo);
-        
-        // search
-        // okay modest
+
         $items = $menuModel->getAvailable();
         $filtered = [];
         if ($q === '') {
@@ -57,9 +54,7 @@ class ApiController {
         
         $menuModel = new MenuItem($this->pdo);
         $item = $menuModel->findById($id);
-        
-        // availability
-        // cart
+
         if (!$item || !$item['is_available']) {
             echo json_encode(['success' => false, 'error' => 'Item not available']);
             return;
@@ -68,8 +63,7 @@ class ApiController {
         if (!isset($_SESSION['cart'])) {
             $_SESSION['cart'] = [];
         }
-        
-        // cart
+
         if (isset($_SESSION['cart'][$id])) {
             $_SESSION['cart'][$id]['quantity']++;
         } else {
@@ -86,13 +80,13 @@ class ApiController {
     
     public function updateCartQuantity() {
         $id = $_POST['id'];
-        $action = $_POST['action']; // 'increase' or 'decrease'
+        $action = $_POST['action']; 
         
         if (isset($_SESSION['cart'][$id])) {
             if ($action === 'increase') {
                 $_SESSION['cart'][$id]['quantity']++;
             } elseif ($action === 'decrease') {
-                // decrement remove
+                
                 $_SESSION['cart'][$id]['quantity']--;
                 if ($_SESSION['cart'][$id]['quantity'] <= 0) {
                     unset($_SESSION['cart'][$id]);
@@ -114,8 +108,7 @@ class ApiController {
     }
     
     private function returnCartTotals() {
-        // cart
-        // front end
+
         $total = 0;
         $count = 0;
         if (isset($_SESSION['cart'])) {
@@ -148,9 +141,7 @@ class ApiController {
             echo json_encode(['success' => false, 'error' => 'Unauthorized']);
             return;
         }
-        
-        // Parse PUT body (JSON or form-urlencoded)
-        // support request
+
         $input = file_get_contents('php://input');
         $data = json_decode($input, true);
         if (!$data) {

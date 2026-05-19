@@ -1,8 +1,7 @@
 <?php require 'views/layouts/header.php'; ?>
 
-<!-- category -->
 <?php 
-// category
+
 $grouped = [];
 foreach ($items as $item) {
     $grouped[$item['category_name']][] = $item;
@@ -16,7 +15,7 @@ foreach ($items as $item) {
         </a>
         <?php foreach (array_keys($grouped) as $catName): ?>
             <?php 
-                // category
+                
                 $emoji = '🍽️';
                 if (stripos($catName, 'pizza') !== false) $emoji = '🍕';
                 elseif (stripos($catName, 'drink') !== false || stripos($catName, 'beverage') !== false) $emoji = '🥤';
@@ -30,7 +29,6 @@ foreach ($items as $item) {
     </div>
 </div>
 
-<!-- Header Branding & Search Wrapper -->
 <div style="display: flex; flex-direction: column; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg);">
     <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--brand-blue); margin: 0; display: flex; align-items: center; gap: 8px;">
         Explore Our Menu
@@ -41,14 +39,13 @@ foreach ($items as $item) {
     
     <div class="search-wrapper" style="margin-top: var(--spacing-sm);">
         <input type="text" id="search" class="search-input" placeholder="Search for pizzas, sides, drinks..." onkeyup="filterMenu()">
-        <!-- search -->
+        
         <span style="position: absolute; right: var(--spacing-md); top: 50%; transform: translateY(-50%); color: var(--color-text-muted); pointer-events: none;">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </span>
     </div>
 </div>
 
-<!-- Main Menu Catalog Container -->
 <div id="menu-container">
     <?php foreach ($grouped as $categoryName => $categoryItems): ?>
         <div id="cat-<?= md5($categoryName) ?>" style="scroll-margin-top: 100px;">
@@ -62,13 +59,12 @@ foreach ($items as $item) {
             <div class="menu-grid">
                 <?php foreach ($categoryItems as $item): ?>
                     <div class="menu-item-card" data-name="<?= strtolower(htmlspecialchars($item['name'])) ?>" data-cat="<?= strtolower(htmlspecialchars($item['category_name'])) ?>">
-                        
-                        <!-- Image Container with visual zoom effect -->
+
                         <div class="card-img-container">
                             <?php if ($item['image_path']): ?>
                                 <img src="<?php echo url('/' . htmlspecialchars($item['image_path'])); ?>" alt="<?= htmlspecialchars($item['name']) ?>" loading="lazy">
                             <?php else: ?>
-                                <!-- Fallback SVG when thumbnail is missing -->
+                                
                                 <div style="width: 100%; height: 100%; background: #e2e8f0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--color-text-muted); gap: var(--spacing-xs);">
                                     <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                                     <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Fresh Choice</span>
@@ -82,13 +78,11 @@ foreach ($items as $item) {
                                 <span class="card-badge badge-tag-green">Veg</span>
                             <?php endif; ?>
                         </div>
-                        
-                        <!-- Card Body Context -->
+
                         <div class="card-content">
                             <h3 class="card-title"><?= htmlspecialchars($item['name']) ?></h3>
                             <p class="card-desc"><?= htmlspecialchars($item['description']) ?></p>
-                            
-                            <!-- Pricing & Primary Tap Action Targets -->
+
                             <div class="card-actions">
                                 <div class="card-price">
                                     ৳<?= number_format($item['price'], 2) ?>
@@ -106,7 +100,6 @@ foreach ($items as $item) {
     <?php endforeach; ?>
 </div>
 
-<!-- PWA Mobile Floating Cart Bar -->
 <?php 
 $cartCount = 0;
 $cartTotal = 0;
@@ -131,13 +124,10 @@ if ($cartCount > 0):
 <?php endif; ?>
 
 <script>
-/**
- * Smooth Category scrolling replicating native app touch selectors.
- */
+
 function scrollToCategory(event, id) {
     event.preventDefault();
-    
-    // Highlight selected pill
+
     document.querySelectorAll('.category-pill').forEach(pill => {
         pill.classList.remove('active');
     });
@@ -153,7 +143,7 @@ function scrollToCategory(event, id) {
     
     const targetElement = document.getElementById(id);
     if (targetElement) {
-        // category
+        
         const offset = 80; 
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - offset;
@@ -165,9 +155,6 @@ function scrollToCategory(event, id) {
     }
 }
 
-/**
- * Filter menu items dynamically in AJAX and re-render using the same premium component-based HTML.
- */
 async function filterMenu() {
     const query = document.getElementById('search').value;
     try {
@@ -177,8 +164,7 @@ async function filterMenu() {
         if (result.ok) {
             const container = document.getElementById('menu-container');
             container.innerHTML = '';
-            
-            // Group the AJAX response categories
+
             const grouped = {};
             result.items.forEach(item => {
                 if (!grouped[item.category_name]) {
@@ -196,8 +182,7 @@ async function filterMenu() {
                     </div>`;
                 return;
             }
-            
-            // search
+
             for (const catName in grouped) {
                 let catHtml = `
                 <div id="cat-${catName.replace(/\s+/g, '-').toLowerCase()}" style="scroll-margin-top: 100px;">
@@ -253,16 +238,13 @@ async function filterMenu() {
     }
 }
 
-/**
- * Modern cart API dispatcher adding full-width tap response.
- */
 async function addToCart(id, event) {
-    // click feedback
+    
     const btn = event.currentTarget;
     const originalContent = btn.innerHTML;
     
     btn.disabled = true;
-    btn.style.background = '#10b981'; // Turn green temporarily to show success
+    btn.style.background = '#10b981'; 
     btn.innerHTML = `
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
         <span>Added</span>
@@ -271,10 +253,9 @@ async function addToCart(id, event) {
     const result = await fetchJson('<?php echo url("/api/cart/add"); ?>', { id: id });
     
     if (result.success) {
-        // Sync cart indicator badge
-        document.getElementById('cart-count').textContent = result.cart_count;
         
-        // cart
+        document.getElementById('cart-count').textContent = result.cart_count;
+
         setTimeout(() => {
             location.reload();
         }, 300);

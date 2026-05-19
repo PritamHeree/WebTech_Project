@@ -6,7 +6,7 @@
     
     <div style="background: #f8f9fa; padding: 1.5rem; text-align: left; margin: 2rem 0; border-radius: 4px; border: 1px solid #dee2e6;">
         <h3 style="margin-top: 0;">Order Information</h3>
-        <?php // confirmation page shows the final order snapshot after checkout ?>
+        <?php ?>
         <p><strong>Order ID:</strong> #<?= htmlspecialchars($order['id']) ?></p>
         <p><strong>Date:</strong> <?= date('M j, Y H:i', strtotime($order['created_at'])) ?></p>
         <p><strong>Status:</strong> <span class="badge badge-pending"><?= htmlspecialchars($order['status']) ?></span></p>

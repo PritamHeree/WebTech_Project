@@ -14,7 +14,7 @@
     <div class="card" style="text-align: center; border-left: 4px solid #dc3545;">
         <h3>Unavailable Items</h3>
         <p style="font-size: 2rem; font-weight: bold; color: #dc3545;"><?= $unavailableCount ?></p>
-        <?php // highlight items hidden from customers so admin can act on them quickly ?>
+        <?php ?>
     </div>
     <div class="card" style="text-align: center;">
         <h3>Orders Queue</h3>

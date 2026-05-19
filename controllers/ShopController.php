@@ -4,13 +4,12 @@ class ShopController {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // cart
-        // db
+
     }
     
     public function menu() {
         $menuModel = new MenuItem($this->pdo);
-        // public menu
+        
         $items = $menuModel->getAvailable();
         require 'views/shop/menu.php';
     }
@@ -20,13 +19,12 @@ class ShopController {
     }
     
     public function checkout() {
-        // cart
+        
         if (!isset($_SESSION['user_id'])) {
             $_SESSION['error'] = "Please login to checkout.";
             redirect('/login');
         }
-        
-        // cart
+
         if (empty($_SESSION['cart'])) {
             $_SESSION['error'] = "Your cart is empty.";
             redirect('/menu');
@@ -34,9 +32,7 @@ class ShopController {
         
         $userModel = new User($this->pdo);
         $user = $userModel->findById($_SESSION['user_id']);
-        
-        // cart
-        // total
+
         $total = 0;
         foreach ($_SESSION['cart'] as $item) {
             $total += $item['price'] * $item['quantity'];
@@ -46,7 +42,7 @@ class ShopController {
     }
     
     public function checkoutPost() {
-        // auth
+        
         if (!isset($_SESSION['user_id'])) {
             redirect('/login');
         }
@@ -58,7 +54,7 @@ class ShopController {
         
         $address = trim($_POST['address']);
         if (empty($address)) {
-            // repopulate
+            
             $_SESSION['error'] = "Delivery address is required.";
             $_SESSION['old'] = $_POST;
             redirect('/checkout');
@@ -66,12 +62,11 @@ class ShopController {
         
         $paymentMethod = $_POST['payment_method'] ?? '';
         if ($paymentMethod !== 'Cash' && $paymentMethod !== 'Card') {
-            // validation
+            
             $_SESSION['error'] = "Please select a valid payment method.";
             redirect('/checkout');
         }
-        
-        // cart
+
         $total = 0;
         $menuModel = new MenuItem($this->pdo);
         foreach ($_SESSION['cart'] as $id => $item) {
@@ -80,7 +75,7 @@ class ShopController {
                 $_SESSION['error'] = "Some items in your cart are no longer available.";
                 redirect('/cart');
             }
-            // Optional: check availability
+            
             if (!$dbItem['is_available']) {
                 $_SESSION['error'] = "Item '" . $item['name'] . "' is currently unavailable.";
                 redirect('/cart');
@@ -93,11 +88,10 @@ class ShopController {
         
         $orderItemModel = new OrderItem($this->pdo);
         foreach ($_SESSION['cart'] as $id => $item) {
-            // cart
+            
             $orderItemModel->create($orderId, $id, $item['quantity'], $item['price']);
         }
-        
-        // cart
+
         unset($_SESSION['cart']);
         
         $_SESSION['success'] = "Order placed successfully!";

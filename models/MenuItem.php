@@ -12,8 +12,7 @@ class MenuItem {
     }
     
     public function getAvailable() {
-        // availability
-        // db
+
         $stmt = $this->pdo->query("SELECT m.*, c.name as category_name FROM menu_items m LEFT JOIN categories c ON m.category_id = c.id WHERE m.is_available = 1 ORDER BY c.name ASC, m.name ASC");
         return $stmt->fetchAll();
     }
@@ -30,8 +29,7 @@ class MenuItem {
     }
     
     public function update($id, $category_id, $name, $description, $price, $image_path, $is_available) {
-        // preserve existing
-        // forcing upload
+
         if ($image_path) {
             $stmt = $this->pdo->prepare("UPDATE menu_items SET category_id = ?, name = ?, description = ?, price = ?, image_path = ?, is_available = ? WHERE id = ?");
             return $stmt->execute([$category_id, $name, $description, $price, $image_path, $is_available, $id]);
@@ -47,7 +45,7 @@ class MenuItem {
     }
     
     public function toggleAvailability($id, $status) {
-        // used admin
+        
         $stmt = $this->pdo->prepare("UPDATE menu_items SET is_available = ? WHERE id = ?");
         return $stmt->execute([$status, $id]);
     }

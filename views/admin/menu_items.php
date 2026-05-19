@@ -3,7 +3,7 @@
 
 <div class="card">
     <h3 id="form-title">Add Menu Item</h3>
-    <?php // the same form is reused for both create and edit actions ?>
+    <?php ?>
     <form action="<?php echo url('/admin/menu-items'); ?>" method="POST" enctype="multipart/form-data" id="item-form">
         <input type="hidden" name="action" id="form-action" value="<?= htmlspecialchars($_SESSION['old']['action'] ?? 'create') ?>">
         <input type="hidden" name="id" id="item-id" value="<?= htmlspecialchars($_SESSION['old']['id'] ?? '') ?>">
@@ -40,7 +40,7 @@
         </div>
         <button type="submit" class="btn" id="form-submit-btn">Add Item</button>
     </form>
-    <?php unset($_SESSION['old']); // clear the temporary form state after rendering ?>
+    <?php unset($_SESSION['old']); ?>
 </div>
 
 <div class="card">
@@ -74,9 +74,9 @@
                     </button>
                 </td>
                 <td>
-                    <!-- Edit Button -->
+                    
                     <button type="button" class="btn" style="padding: 0.25rem 0.5rem;" onclick='editItem(<?= json_encode($item, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)'>Edit</button>
-                    <!-- Delete Form -->
+                    
                     <form action="<?php echo url('/admin/menu-items'); ?>" method="POST" onsubmit="return confirm('Delete this item?');" style="display:inline;">
                         <input type="hidden" name="action" value="delete">
                         <input type="hidden" name="id" value="<?= $item['id'] ?>">
@@ -117,8 +117,7 @@ function editItem(item) {
     document.getElementById('item-description').value = item.description || '';
     document.getElementById('item-available').checked = parseInt(item.is_available) === 1;
     document.getElementById('form-submit-btn').textContent = 'Save Changes';
-    
-    // Add cancel button if not already there
+
     if (!document.getElementById('btn-cancel')) {
         const cancelBtn = document.createElement('button');
         cancelBtn.type = 'button';

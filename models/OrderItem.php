@@ -4,11 +4,11 @@ class OrderItem {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // order items
+        
     }
     
     public function getByOrder($orderId) {
-        // include menu item name for order details
+        
         $stmt = $this->pdo->prepare("SELECT oi.*, m.name FROM order_items oi JOIN menu_items m ON oi.menu_item_id = m.id WHERE oi.order_id = ?");
         $stmt->execute([$orderId]);
         return $stmt->fetchAll();

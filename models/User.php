@@ -4,8 +4,7 @@ class User {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // db
-        // auth
+
     }
     
     public function findByEmail($email) {
@@ -21,7 +20,7 @@ class User {
     }
     
     public function findByRememberToken($token) {
-        // remember
+        
         $stmt = $this->pdo->prepare("SELECT * FROM users WHERE remember_token = ?");
         $stmt->execute([$token]);
         return $stmt->fetch();
@@ -29,14 +28,13 @@ class User {
     
     public function create($name, $email, $password, $address) {
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        // hash pass
+        
         $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password, delivery_address, role) VALUES (?, ?, ?, ?, 'customer')");
         return $stmt->execute([$name, $email, $hash, $address]);
     }
     
     public function updateRememberToken($userId, $token) {
-        // hash pass
-        // db
+
         $stmt = $this->pdo->prepare("UPDATE users SET remember_token = ? WHERE id = ?");
         return $stmt->execute([$token, $userId]);
     }
@@ -47,7 +45,7 @@ class User {
     }
     
     public function updatePassword($id, $password) {
-        // hash pass
+        
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $this->pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
         return $stmt->execute([$hash, $id]);
