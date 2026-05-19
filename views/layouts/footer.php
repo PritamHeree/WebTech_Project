@@ -1,7 +1,7 @@
     </div>
     <script>
         // Common utility functions
-        // fetchJson sends data as multipart/form-data so PHP can read it in $_POST.
+        // fetchjson sends
         async function fetchJson(url, data) {
             const formData = new FormData();
             for (const key in data) {

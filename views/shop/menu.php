@@ -1,8 +1,8 @@
 <?php require 'views/layouts/header.php'; ?>
 
-<!-- Sticky PWA Category Navigation Bar (Domino's Discovery inspired) -->
+<!-- category -->
 <?php 
-// Group items by category to construct both our sticky categories index and the structured grid panels
+// category
 $grouped = [];
 foreach ($items as $item) {
     $grouped[$item['category_name']][] = $item;
@@ -16,7 +16,7 @@ foreach ($items as $item) {
         </a>
         <?php foreach (array_keys($grouped) as $catName): ?>
             <?php 
-                // Display custom emojis per category for an expressive, visual touch
+                // category
                 $emoji = '🍽️';
                 if (stripos($catName, 'pizza') !== false) $emoji = '🍕';
                 elseif (stripos($catName, 'drink') !== false || stripos($catName, 'beverage') !== false) $emoji = '🥤';
@@ -41,7 +41,7 @@ foreach ($items as $item) {
     
     <div class="search-wrapper" style="margin-top: var(--spacing-sm);">
         <input type="text" id="search" class="search-input" placeholder="Search for pizzas, sides, drinks..." onkeyup="filterMenu()">
-        <!-- Magnifying glass SVG icon embedded inside the search bar -->
+        <!-- search -->
         <span style="position: absolute; right: var(--spacing-md); top: 50%; transform: translateY(-50%); color: var(--color-text-muted); pointer-events: none;">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </span>
@@ -153,7 +153,7 @@ function scrollToCategory(event, id) {
     
     const targetElement = document.getElementById(id);
     if (targetElement) {
-        // Offset for the sticky category header scroller
+        // category
         const offset = 80; 
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - offset;
@@ -197,7 +197,7 @@ async function filterMenu() {
                 return;
             }
             
-            // Generate exact premium cards dynamically for search results
+            // search
             for (const catName in grouped) {
                 let catHtml = `
                 <div id="cat-${catName.replace(/\s+/g, '-').toLowerCase()}" style="scroll-margin-top: 100px;">
@@ -257,7 +257,7 @@ async function filterMenu() {
  * Modern cart API dispatcher adding full-width tap response.
  */
 async function addToCart(id, event) {
-    // Add visual click animation feedback directly to the tapped button
+    // click feedback
     const btn = event.currentTarget;
     const originalContent = btn.innerHTML;
     
@@ -274,7 +274,7 @@ async function addToCart(id, event) {
         // Sync cart indicator badge
         document.getElementById('cart-count').textContent = result.cart_count;
         
-        // Fast reload to seamlessly update PHP session data and floating mobile checkout components
+        // cart
         setTimeout(() => {
             location.reload();
         }, 300);

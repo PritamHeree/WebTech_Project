@@ -4,7 +4,7 @@ class OrderItem {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // order items are loaded as part of order details and share the same PDO instance.
+        // order items
     }
     
     public function getByOrder($orderId) {

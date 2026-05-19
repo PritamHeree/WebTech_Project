@@ -5,7 +5,7 @@ class UserController {
     public function __construct($pdo) {
         $this->pdo = $pdo;
         // user area must be authenticated
-        // this is the first gate for profile access and settings updates
+        // first gate
         if (!isset($_SESSION['user_id'])) {
             redirect('/login');
         }
@@ -29,7 +29,7 @@ class UserController {
         $newPassword = $_POST['new_password'];
         
         // Verify current password to allow updates
-        // this prevents an attacker from changing profile data without knowing the account password
+        // prevents attacker
         if (!password_verify($currentPassword, $user['password'])) {
             $_SESSION['error'] = "Current password is incorrect.";
             $_SESSION['old'] = $_POST;
@@ -37,11 +37,11 @@ class UserController {
         }
         
         $userModel->updateProfile($id, $name, $email, $address);
-        // keep the session name in sync after profile edits
+        // session name
         $_SESSION['name'] = $name; // Update session
         
         if (!empty($newPassword)) {
-            // allow password change only when a valid new password is provided
+            // allow password
             if (strlen($newPassword) < 8) {
                 $_SESSION['error'] = "New password must be at least 8 characters.";
                 $_SESSION['old'] = $_POST;

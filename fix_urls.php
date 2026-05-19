@@ -7,8 +7,7 @@ foreach ($iterator as $file) {
     if ($file->getExtension() !== 'php') continue;
     if ($file->getFilename() === 'index.php') continue;
     if ($file->getFilename() === 'fix_urls.php') continue;
-    // This helper is only for correcting hardcoded project path references
-    // left behind by earlier deployment or naming issues.
+    // path fix
     
     $content = file_get_contents($file->getPathname());
     $original = $content;

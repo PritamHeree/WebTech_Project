@@ -4,13 +4,13 @@ class ApiController {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // make sure every API response is JSON; avoids confusing the client with HTML errors
-        // and ensures the JavaScript client can parse every response consistently.
+        // make sure
+        // ensures javascript
         header('Content-Type: application/json');
     }
     
     public function toggleMenuItem() {
-        // API endpoint only for admin users; this is a strict server-side gate
+        // api endpoint
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             echo json_encode(['success' => false, 'error' => 'Unauthorized']);
             return;
@@ -31,8 +31,8 @@ class ApiController {
         $q = isset($_GET['q']) ? $_GET['q'] : '';
         $menuModel = new MenuItem($this->pdo);
         
-        // keep search simple for now by filtering available items in PHP
-        // this is okay for modest menu sizes; for large datasets we'd move this into SQL
+        // search
+        // okay modest
         $items = $menuModel->getAvailable();
         $filtered = [];
         if ($q === '') {
@@ -58,8 +58,8 @@ class ApiController {
         $menuModel = new MenuItem($this->pdo);
         $item = $menuModel->findById($id);
         
-        // verify availability here too, not just on the menu page
-        // session/cart state is not authoritative without server-side confirmation
+        // availability
+        // cart
         if (!$item || !$item['is_available']) {
             echo json_encode(['success' => false, 'error' => 'Item not available']);
             return;
@@ -69,7 +69,7 @@ class ApiController {
             $_SESSION['cart'] = [];
         }
         
-        // keep cart quantities in the session so order flow works across pages
+        // cart
         if (isset($_SESSION['cart'][$id])) {
             $_SESSION['cart'][$id]['quantity']++;
         } else {
@@ -92,7 +92,7 @@ class ApiController {
             if ($action === 'increase') {
                 $_SESSION['cart'][$id]['quantity']++;
             } elseif ($action === 'decrease') {
-                // decrement and remove items at zero quantity to keep session data clean
+                // decrement remove
                 $_SESSION['cart'][$id]['quantity']--;
                 if ($_SESSION['cart'][$id]['quantity'] <= 0) {
                     unset($_SESSION['cart'][$id]);
@@ -114,8 +114,8 @@ class ApiController {
     }
     
     private function returnCartTotals() {
-        // total and count are used by the UI to refresh cart summary after updates
-        // this keeps the front-end consistent with the server-side session state
+        // cart
+        // front end
         $total = 0;
         $count = 0;
         if (isset($_SESSION['cart'])) {
@@ -150,7 +150,7 @@ class ApiController {
         }
         
         // Parse PUT body (JSON or form-urlencoded)
-        // support both request formats so frontend clients can send either type
+        // support request
         $input = file_get_contents('php://input');
         $data = json_decode($input, true);
         if (!$data) {

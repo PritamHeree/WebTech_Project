@@ -4,8 +4,8 @@ class OrderController {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // order pages are user-only; redirect guests immediately
-        // preventing viewing or creating orders without an authenticated identity.
+        // order pages
+        // auth
         if (!isset($_SESSION['user_id'])) {
             redirect('/login');
         }
@@ -15,7 +15,7 @@ class OrderController {
         $orderModel = new Order($this->pdo);
         $orders = $orderModel->getByUser($_SESSION['user_id']);
         
-        // attach line items to each order so the view can render order details cleanly
+        // attach line
         $orderItemModel = new OrderItem($this->pdo);
         foreach ($orders as &$order) {
             $order['items'] = $orderItemModel->getByOrder($order['id']);

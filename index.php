@@ -2,8 +2,8 @@
 session_start();
 require_once 'config/database.php';
 
-// Start each request with a shared database connection and session state
-// This file is the single entry point and orchestrates controller dispatch.
+// db
+// bootstrap
 
 // Helper for generating base URLs
 function url($path = '') {
@@ -26,7 +26,7 @@ function url($path = '') {
 // Helper for redirecting
 function redirect($url) {
     if (!preg_match('~^(?:f|ht)tps?://~i', $url)) {
-        // Normalize relative internal paths to absolute URLs using the url() helper.
+        // path
         if (strpos($url, '/') === 0) {
             $url = url($url);
         } else {
@@ -41,13 +41,13 @@ function redirect($url) {
 $requestUri = $_SERVER['REQUEST_URI'];
 $scriptName = $_SERVER['SCRIPT_NAME'];
 
-// Remove query string for clean path matching
+// path
 $uri = parse_url($requestUri, PHP_URL_PATH);
 
-// Normalize the subdirectory path (handle spaces vs %20)
+// path
 $baseDir = dirname($scriptName);
 if ($baseDir !== '/') {
-    // Decode both to ensure they match (e.g. "WebTech Project" vs "WebTech%20Project")
+    // path
     $decodedUri = rawurldecode($uri);
     $decodedBase = rawurldecode($baseDir);
     
@@ -56,14 +56,14 @@ if ($baseDir !== '/') {
     }
 }
 
-// Ensure $uri starts with / but isn't just empty
+// path
 if (empty($uri)) $uri = '/';
 
 // Handle routes
 $method = $_SERVER['REQUEST_METHOD'];
 
-// Add autoloader for controllers and models
-// This keeps the bootstrap simple and avoids manual require statements for every class.
+// add autoloader
+// bootstrap
 spl_autoload_register(function ($class) {
     if (file_exists("controllers/$class.php")) {
         require_once "controllers/$class.php";
@@ -72,12 +72,12 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// Check Remember Me cookie if no session user
-// This provides a seamless login experience across browser sessions.
+// remember
+// seamless login
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     $userModel = new User($pdo);
     $cookieHash = hash('sha256', $_COOKIE['remember_token']);
-    // compare hashed token in DB instead of storing raw value
+    // token
     $user = $userModel->findByRememberToken($cookieHash);
     if ($user) {
         $_SESSION['user_id'] = $user['id'];
@@ -156,7 +156,7 @@ if ($uri === '/' || $uri === '' || $uri === '/menu') {
     if ($method === 'PUT') $controller->updateOrderStatus($matches[1]);
     else $controller->getOrderStatus($matches[1]);
 } else {
-    // fallback when no route matches; keep it explicit rather than redirecting blindly
+    // fallback
     http_response_code(404);
     echo "404 Not Found";
 }

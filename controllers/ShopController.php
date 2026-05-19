@@ -4,13 +4,13 @@ class ShopController {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // this controller is stateless aside from session cart data,
-        // so it only needs a PDO connection to read menu items.
+        // cart
+        // db
     }
     
     public function menu() {
         $menuModel = new MenuItem($this->pdo);
-        // show only customer-facing items; admin-hidden items stay out of the public menu
+        // public menu
         $items = $menuModel->getAvailable();
         require 'views/shop/menu.php';
     }
@@ -20,13 +20,13 @@ class ShopController {
     }
     
     public function checkout() {
-        // require login before checkout because anonymous orders are not supported yet
+        // cart
         if (!isset($_SESSION['user_id'])) {
             $_SESSION['error'] = "Please login to checkout.";
             redirect('/login');
         }
         
-        // don't allow checkout with an empty cart; this keeps the flow consistent
+        // cart
         if (empty($_SESSION['cart'])) {
             $_SESSION['error'] = "Your cart is empty.";
             redirect('/menu');
@@ -35,8 +35,8 @@ class ShopController {
         $userModel = new User($this->pdo);
         $user = $userModel->findById($_SESSION['user_id']);
         
-        // calculate total from session cart items so checkout summary stays accurate
-        // do not trust any client-side subtotal values here
+        // cart
+        // total
         $total = 0;
         foreach ($_SESSION['cart'] as $item) {
             $total += $item['price'] * $item['quantity'];
@@ -46,7 +46,7 @@ class ShopController {
     }
     
     public function checkoutPost() {
-        // verify login again before placing order; this is a safety check for direct POSTs
+        // auth
         if (!isset($_SESSION['user_id'])) {
             redirect('/login');
         }
@@ -58,7 +58,7 @@ class ShopController {
         
         $address = trim($_POST['address']);
         if (empty($address)) {
-            // keep user input so form can be repopulated after validation errors
+            // repopulate
             $_SESSION['error'] = "Delivery address is required.";
             $_SESSION['old'] = $_POST;
             redirect('/checkout');
@@ -66,12 +66,12 @@ class ShopController {
         
         $paymentMethod = $_POST['payment_method'] ?? '';
         if ($paymentMethod !== 'Cash' && $paymentMethod !== 'Card') {
-            // fail-safe server-side validation for payment selection
+            // validation
             $_SESSION['error'] = "Please select a valid payment method.";
             redirect('/checkout');
         }
         
-        // re-check menu item availability on submit to avoid stale cart orders
+        // cart
         $total = 0;
         $menuModel = new MenuItem($this->pdo);
         foreach ($_SESSION['cart'] as $id => $item) {
@@ -93,11 +93,11 @@ class ShopController {
         
         $orderItemModel = new OrderItem($this->pdo);
         foreach ($_SESSION['cart'] as $id => $item) {
-            // persist each cart line item with the price at checkout time
+            // cart
             $orderItemModel->create($orderId, $id, $item['quantity'], $item['price']);
         }
         
-        // clear cart after successful order so duplicate submissions don't reuse the same items
+        // cart
         unset($_SESSION['cart']);
         
         $_SESSION['success'] = "Order placed successfully!";

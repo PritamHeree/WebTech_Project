@@ -50,7 +50,7 @@ function toggleDetails(id) {
 }
 
 // Status Polling for active orders
-// keep the user updated without requiring refresh
+// refresh
 const activeOrders = <?= json_encode(array_values(array_filter($orders, function($o) { return $o['status'] !== 'Delivered'; }))) ?>;
 
 activeOrders.forEach(order => {

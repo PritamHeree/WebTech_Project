@@ -4,7 +4,7 @@ class Category {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // categories are simple lookup/update records tied to the same DB connection.
+        // db
     }
     
     public function getAll() {
@@ -31,7 +31,7 @@ class Category {
     }
     
     public function delete($id) {
-        // prevent deleting categories that are still in use
+        // category
         $stmt = $this->pdo->prepare("SELECT COUNT(*) as cnt FROM menu_items WHERE category_id = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch();

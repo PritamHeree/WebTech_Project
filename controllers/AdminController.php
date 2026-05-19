@@ -4,8 +4,8 @@ class AdminController {
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        // admin-only controller guard: enforce both login and role in one place
-        // this keeps every admin route protected without repeating checks later
+        // admin controller
+        // every admin
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             redirect('/login');
         }
@@ -15,7 +15,7 @@ class AdminController {
         $catModel = new Category($this->pdo);
         $menuModel = new MenuItem($this->pdo);
         
-        // show quick admin stats for the dashboard so the owner can spot issues fast
+        // show quick
         $categoriesCount = $catModel->getCount();
         $menuItemsCount = $menuModel->getCount();
         $unavailableCount = $menuModel->getUnavailableCount();
@@ -36,7 +36,7 @@ class AdminController {
         if ($action === 'create') {
             $name = trim($_POST['name']);
             if (!empty($name)) {
-                // create a new menu category; keep it simple and avoid empty names
+                // category
                 $catModel->create($name);
                 $_SESSION['success'] = "Category created.";
             } else {
@@ -47,7 +47,7 @@ class AdminController {
             $id = $_POST['id'];
             $name = trim($_POST['name']);
             if (!empty($name)) {
-                // rename category safely, keeping the same ID
+                // category
                 $catModel->update($id, $name);
                 $_SESSION['success'] = "Category updated.";
             } else {
@@ -56,8 +56,8 @@ class AdminController {
             }
         } elseif ($action === 'delete') {
             $id = $_POST['id'];
-            // prevent deleting categories that still have menu items
-            // this avoids leaving child records orphaned in the menu_items table
+            // category
+            // leaving child
             if (!$catModel->delete($id)) {
                 $_SESSION['error'] = "Cannot delete category: It has existing menu items.";
             } else {
@@ -82,14 +82,14 @@ class AdminController {
         $menuModel = new MenuItem($this->pdo);
         
         if ($action === 'create' || $action === 'edit') {
-            // use a single handler for both create and edit to reduce duplicated logic
+            // use single
             $name = trim($_POST['name']);
             $description = trim($_POST['description']);
             $price = floatval($_POST['price']); // normalize form input to a float
             $categoryId = $_POST['category_id'];
             $isAvailable = isset($_POST['is_available']) ? 1 : 0; // checkbox => 1/0
             
-            // basic validation before saving menu items
+            // validation
             if ($price <= 0) {
                 $_SESSION['error'] = "Price must be positive.";
                 $_SESSION['old'] = $_POST;
@@ -123,7 +123,7 @@ class AdminController {
                 $destination = $dir . '/' . $filename;
                 
                 if (move_uploaded_file($tmpName, $destination)) {
-                    // only accept the upload if PHP has moved it securely
+                    // accept upload
                     $imagePath = $destination;
                 } else {
                     $_SESSION['error'] = "Failed to save the uploaded image.";
@@ -148,7 +148,7 @@ class AdminController {
             }
         } elseif ($action === 'delete') {
             $id = $_POST['id'];
-            // remove file from disk if present when deleting a menu item
+            // remove file
             $item = $menuModel->findById($id);
             if ($item && $item['image_path'] && file_exists($item['image_path'])) {
                 unlink($item['image_path']);
@@ -166,7 +166,7 @@ class AdminController {
         $statusFilter = isset($_GET['status']) ? $_GET['status'] : '';
         $dateFilter = isset($_GET['date']) ? $_GET['date'] : '';
         
-        // support admin filtering by status and date
+        // support admin
         $orders = $orderModel->getFiltered($statusFilter, $dateFilter);
         
         // Fetch items for each order

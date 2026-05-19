@@ -28,10 +28,10 @@
         </a>
     </div>
 <?php else: ?>
-    <!-- Master responsive split screen layout for Cart items and Checkout summaries -->
+    <!-- cart -->
     <div class="cart-layout">
         
-        <!-- Left Side: Interactive Touch-Optimized Cards list -->
+        <!-- left side -->
         <div class="cart-items-list" id="cart-container">
             <?php 
             $grandTotal = 0;
@@ -41,7 +41,7 @@
                 $subtotal = $item['price'] * $item['quantity'];
                 $grandTotal += $subtotal;
                 
-                // Retrieve menu item database details for thumbnails
+                // db
                 $dbItem = $menuModel->findById($id);
                 $imagePath = $dbItem ? $dbItem['image_path'] : '';
             ?>
@@ -85,7 +85,7 @@
             <?php endforeach; ?>
         </div>
         
-        <!-- Right Side: Sticky summary sidebar with active CTAs -->
+        <!-- sticky header -->
         <div class="summary-card">
             <h3 class="summary-title">Order Summary</h3>
             
@@ -109,7 +109,7 @@
                 <span id="grand-total">৳<?= number_format($grandTotal, 2) ?></span>
             </div>
             
-            <!-- High visibility, thumb-friendly checkout trigger -->
+            <!-- cart -->
             <a href="<?php echo url('/checkout'); ?>" class="btn-checkout">
                 Proceed to Checkout
             </a>
@@ -156,7 +156,7 @@ async function updateQuantity(id, action) {
         } else {
             qtySpan.textContent = currentQty;
             
-            // Clean state update reading data-price attribute avoiding brittle DOM scrapers
+            // clean state
             const card = document.getElementById('cart-row-' + id);
             const price = parseFloat(card.dataset.price);
             document.getElementById('subtotal-' + id).textContent = '৳' + (price * currentQty).toFixed(2);
@@ -165,7 +165,7 @@ async function updateQuantity(id, action) {
         // Sync grand total readout
         document.getElementById('grand-total').textContent = '৳' + result.total;
         
-        // Update the subtotal in the Order Summary list sidebar too
+        // total
         const subtotalRow = document.querySelector('.summary-row span:last-child');
         if (subtotalRow) {
             subtotalRow.textContent = '৳' + result.total;

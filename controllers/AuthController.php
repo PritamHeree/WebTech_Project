@@ -7,7 +7,7 @@ class AuthController {
     }
     
     public function login() {
-        // already logged in? keep people out of the login page
+        // auth
         if (isset($_SESSION['user_id'])) {
             redirect('/');
         }
@@ -23,15 +23,15 @@ class AuthController {
         $user = $userModel->findByEmail($email);
         
         if ($user && password_verify($password, $user['password'])) {
-            // success login: store minimal identity info in session
-            // keeping role here avoids extra DB lookups on protected pages
+            // success login
+            // keeping role
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['name'] = $user['name'];
             $_SESSION['role'] = $user['role'];
             
             if ($remember) {
-                // store a hashed remember token in DB and raw token in cookie
-                // raw token is only needed on the client; the DB keeps the hash for verification
+                // remember
+                // token is
                 $token = bin2hex(random_bytes(32));
                 $hash = hash('sha256', $token);
                 $userModel->updateRememberToken($user['id'], $hash);
@@ -162,7 +162,7 @@ class AuthController {
     
     public function logout() {
         // clear session and persistent login token
-        // session_destroy removes server-side session state
+        // session destroy
         session_destroy();
         if (isset($_COOKIE['remember_token'])) {
             unset($_COOKIE['remember_token']);
