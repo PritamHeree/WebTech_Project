@@ -165,13 +165,14 @@
             flex-grow: 1;
         }
     </style>
+    <link rel="stylesheet" href="<?php echo url('/public/css/menu-cart.css'); ?>">
 </head>
 <body>
     <header>
-        <div class="logo">
-            <a href="<?php echo url('/'); ?>" style="margin-left: 0; font-size: 1.5rem; font-weight: bold; color: #fff;">KhudaLagse?</a>
+        <div class="logo" style="display: flex; flex-direction: column; gap: 2px;">
+            <a href="<?php echo url('/'); ?>" style="margin-left: 0; font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1.1; letter-spacing: -0.5px; text-decoration: none;">KhudaLagse?</a>
+            <span style="font-size: 0.725rem; font-weight: 400; color: rgba(255, 255, 255, 0.85); letter-spacing: 0.2px;">Hungry? We’re on our way.</span>
         </div>
-        <?php // header uses url() helper to build links that work even when the app is in a subdirectory ?>
         <nav>
             <a href="<?php echo url('/menu'); ?>">Menu</a>
             <?php if (isset($_SESSION['user_id'])): ?>

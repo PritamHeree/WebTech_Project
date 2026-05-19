@@ -98,6 +98,10 @@ if ($uri === '/' || $uri === '' || $uri === '/menu') {
     $controller = new AuthController($pdo);
     if ($method === 'POST') $controller->registerPost();
     else $controller->register();
+} elseif ($uri === '/verify') {
+    $controller = new AuthController($pdo);
+    if ($method === 'POST') $controller->verifyPost();
+    else $controller->verify();
 } elseif ($uri === '/logout') {
     $controller = new AuthController($pdo);
     $controller->logout();

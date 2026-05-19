@@ -48,6 +48,11 @@ class ApiController {
     }
     
     public function addToCart() {
+        if (!isset($_SESSION['user_id'])) {
+            echo json_encode(['success' => false, 'unauthorized' => true, 'redirect' => url('/login')]);
+            return;
+        }
+
         $id = $_POST['id'];
         
         $menuModel = new MenuItem($this->pdo);
@@ -180,7 +185,7 @@ class ApiController {
         if ($orderModel->updateStatus($id, $status)) {
             echo json_encode(['ok' => true]);
         } else {
-            echo json_encode(['ok' => false, 'error' => 'Failed to update status']);
+            echo json_encode(['ok' => false, 'error' =>  'Failed to update status']);
         }
     }
 }
